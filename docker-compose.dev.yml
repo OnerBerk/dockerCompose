@@ -1,0 +1,26 @@
+# docker-compose.yml
+# build construit une image en partant de cette route
+#volume permet de faire persisté les données
+##docker-compose -f docker-compose.dev.yml up --build  - pour rebuilder en prenant en compte les modif du package.json comme nodemon
+##pour que l'app soit toujours sous la surveillance de docker on va creer un volume.
+#
+##pour que les donnees persistes on rajouteras aussi volume a l'image mongo
+##docker-compose down pour arreter les containeur
+services:
+  server:
+    build: ./server
+    command: npm run dev
+    volumes:
+      - ./server/src/:/app/src/
+    ports:
+      - 5050:5000
+  mongodb:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+  client:
+    build: ./client
+    ports:
+      - 8080:3000
+    volumes:
+      - ./client/src:/app/src/
